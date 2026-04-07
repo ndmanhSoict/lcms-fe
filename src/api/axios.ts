@@ -1,7 +1,7 @@
-
 import axios from 'axios';
-import { queryClient } from '@/lib/queryClient';
 import { useAuthStore } from '@/store/authStore';
+import { queryClient } from '@/lib/queryClient';
+import { disconnectSocket } from '@/socket';
 
 export const apiClient = axios.create({
     baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
@@ -28,6 +28,9 @@ apiClient.interceptors.response.use(
             useAuthStore.getState().logout();
 
             queryClient.clear();
+
+            // 3. Ngắt kết nối Real-time ngay lập tức
+            disconnectSocket();
 
             if (window.location.pathname !== '/login') {
                 window.location.href = '/login';
