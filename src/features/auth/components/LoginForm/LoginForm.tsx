@@ -1,12 +1,19 @@
+// src/features/auth/components/LoginForm/LoginForm.tsx
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Box, Typography, TextField, Button, Checkbox, FormControlLabel, IconButton, InputAdornment } from '@mui/material';
+import { Box, Typography, TextField, Button, Checkbox, FormControlLabel, IconButton, InputAdornment, Alert } from '@mui/material';
 import { MailOutline, LockOutlined, Visibility, VisibilityOff, ArrowForward } from '@mui/icons-material';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+
 import * as S from './login-form.style';
 import { GradientText } from '@/components/BrandPanel/brand-panel.style';
+import { useAuthStore } from '@/store/authStore';
+import { authApi, LoginPayload } from '../../api/auth.api';
 
+// Xác thực form sử dụng email
 const loginSchema = z.object({
     email: z.string().email('Email không hợp lệ'),
     password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
@@ -17,15 +24,43 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
+    // const setToken = useAuthStore((state) => state.setToken);
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>({
         resolver: zodResolver(loginSchema),
         defaultValues: { rememberMe: false }
     });
 
+    const loginMutation = useMutation({
+        mutationFn: (payload: LoginPayload) => authApi.login(payload),
+        onSuccess: (data) => {
+            // Sử dụng hàm setAuth mới để lưu cả token và user
+            const { accessToken, user } = data.data;
+            useAuthStore.getState().setAuth(accessToken, user);
+
+            // Chuyển role về chữ thường để so sánh an toàn
+            const role = user.role?.toLowerCase() || '';
+
+            // Kiểm tra đúng giá trị 'system_owner'
+            if (['admin', 'branch', 'staff', 'system_owner'].includes(role)) {
+                navigate({ to: '/dashboard' });
+            }
+            // else if (role === 'teacher') {
+            //     navigate({ to: '/teacher' });
+            // } else if (['student', 'parent'].includes(role)) {
+            //     navigate({ to: '/learning' });
+            // } else {
+            //     navigate({ to: '/' });
+            // }
+        },
+    });
+
     const onSubmit = (data: LoginFormInputs) => {
-        console.log('Login Data:', data);
-        // TODO: Gọi API loginApi(data) tại đây
+        loginMutation.mutate({
+            email: data.email,
+            password: data.password,
+        });
     };
 
     return (
@@ -38,6 +73,12 @@ export const LoginForm = () => {
                     Sign in to your EduCore account
                 </Typography>
             </Box>
+
+            {loginMutation.isError && (
+                <Alert severity="error" sx={{ mb: 3 }}>
+                    {(loginMutation.error as any)?.response?.data?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!'}
+                </Alert>
+            )}
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -93,14 +134,15 @@ export const LoginForm = () => {
                         </Typography>
                     </Box>
 
-                    <Button 
-                        type="submit" 
-                        variant="contained" 
-                        fullWidth 
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
                         size="large"
+                        disabled={loginMutation.isPending}
                         endIcon={<ArrowForward />}
                     >
-                        Sign In
+                        {loginMutation.isPending ? 'Signing in...' : 'Sign In'}
                     </Button>
                 </Box>
             </form>
@@ -115,13 +157,6 @@ export const LoginForm = () => {
                     <Typography variant="subtitle2" fontWeight={600}>Microsoft</Typography>
                 </S.SocialButton>
             </Box>
-
-            <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 4 }}>
-                Don't have an account?{' '}
-                <Typography component="a" href="#" variant="body2" color="primary.main" fontWeight={600} sx={{ textDecoration: 'none' }}>
-                    Contact your administrator
-                </Typography>
-            </Typography>
         </S.StyledPaper>
     );
 };
