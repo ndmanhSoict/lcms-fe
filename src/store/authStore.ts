@@ -1,9 +1,19 @@
+// src/store/authStore.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+interface User {
+    id: string;
+    email: string;
+    role: string;
+    fullName: string;
+    branchId: string | null;
+}
+
 interface AuthState {
     accessToken: string | null;
-    setToken: (token: string) => void;
+    user: User | null; // Thêm thông tin user
+    setAuth: (token: string, user: User) => void; // Cập nhật cả 2 cùng lúc
     logout: () => void;
 }
 
@@ -11,11 +21,12 @@ export const useAuthStore = create<AuthState>()(
     persist(
         (set) => ({
             accessToken: null,
-            setToken: (accessToken) => set({ accessToken }),
-            logout: () => set({ accessToken: null }),
+            user: null,
+            setAuth: (accessToken, user) => set({ accessToken, user }),
+            logout: () => set({ accessToken: null, user: null }),
         }),
         {
-            name: 'lcms-auth-token', // Chỉ lưu token ở LocalStorage
+            name: 'lcms-auth-storage',
         }
     )
 );
