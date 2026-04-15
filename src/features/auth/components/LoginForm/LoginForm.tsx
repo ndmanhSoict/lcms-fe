@@ -45,7 +45,7 @@ export const LoginForm = () => {
 
             // Chuyển hướng role hệ thống đặc biệt về trang quản trị
             if (role === 'system_owner') {
-                navigate({ to: '/darshboard' });
+                navigate({ to: '/dashboard' });
             } 
         },
     });
