@@ -1,24 +1,27 @@
-import { styled, Box, AppBar } from '@mui/material';
+import { styled, Box, alpha } from '@mui/material';
 
-export const LayoutContainer = styled(Box)({
-    margin: '0 auto',
+export const LayoutWrapper = styled(Box)(({ theme }) => {
+  // Lấy màu từ palette để tạo Mesh Gradient tương thích cả 2 mode
+  const blob1 = alpha(theme.palette.primary.light, 0.4);
+  const blob2 = alpha(theme.palette.secondary.light, 0.4);
+  const blob3 = alpha(theme.palette.tertiary.light, 0.4);
+  const base = theme.palette.background.default;
+
+  return {
     display: 'flex',
-    flexDirection: 'column',
     minHeight: '100vh',
+    backgroundColor: base,
+    background: `radial-gradient(at 0% 0%, ${blob1} 0px, transparent 50%),
+                 radial-gradient(at 100% 0%, ${blob2} 0px, transparent 50%),
+                 radial-gradient(at 100% 100%, ${blob3} 0px, transparent 50%),
+                 radial-gradient(at 0% 100%, ${base} 0px, transparent 50%)`,
+    backgroundAttachment: 'fixed',
+  };
 });
 
-export const StyledAppBar = styled(AppBar)(({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.palette.mode === 'light' ? '0px 0px 0px 1px #E0E0E0' : '0px 0px 0px 1px #2D3449',
-    '& .MuiToolbar-root': {
-        minHeight: 52,
-        [theme.breakpoints.down('sm')]: {
-            paddingLeft: theme.spacing(2),
-        },
-    },
-}));
-
-export const ContentBox = styled(Box)(({ theme }) => ({
-    flexGrow: 1,
-    backgroundColor: theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.background.default,
+export const MainContent = styled('main')(({ theme }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(4),
+  marginTop: 80, // Chiều cao của Header
+  minHeight: '100vh',
 }));

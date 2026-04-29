@@ -41,18 +41,12 @@ export const LoginForm = () => {
 
             // Chuyển role về chữ thường để so sánh an toàn
             const role = user.role?.toLowerCase() || '';
+            console.log('Logged in user role:', role);
 
-            // Kiểm tra đúng giá trị 'system_owner'
-            if (['admin', 'branch', 'staff', 'system_owner'].includes(role)) {
+            // Chuyển hướng role hệ thống đặc biệt về trang quản trị
+            if (role === 'system_owner') {
                 navigate({ to: '/dashboard' });
-            }
-            // else if (role === 'teacher') {
-            //     navigate({ to: '/teacher' });
-            // } else if (['student', 'parent'].includes(role)) {
-            //     navigate({ to: '/learning' });
-            // } else {
-            //     navigate({ to: '/' });
-            // }
+            } 
         },
     });
 
