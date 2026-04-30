@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const p = require\\('./package.json'\\); const deps = {...p.dependencies, ...p.devDependencies}; ['@hookform/resolvers','react-hook-form','zod','@tanstack/react-query','@mui/material','@mui/icons-material'].forEach\\(k => console.log\\(k, deps[k] || 'MISSING'\\)\\)\")",
+      "Bash(npx tsc *)"
+    ]
+  }
+}
