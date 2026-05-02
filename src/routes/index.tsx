@@ -1,25 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Button, Typography, Box } from '@mui/material';
-import { useUiStore } from '@/store/uiStore';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import { useAuthStore } from '@/store/authStore';
 
 export const Route = createFileRoute('/')({
-    component: HomePage,
+    beforeLoad: () => {
+        const user = useAuthStore.getState().user;
+        if (!user) throw redirect({ to: '/login' });
+        const role = user.role.toUpperCase();
+        if (role === 'SYSTEM_OWNER') throw redirect({ to: '/dashboard' });
+        if (role === 'BRANCH_OWNER' || role === 'STAFF') throw redirect({ to: '/students' });
+        throw redirect({ to: '/login' });
+    },
 });
-
-function HomePage() {
-    const { themeMode, toggleTheme } = useUiStore();
-
-    return (
-        <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-            <Typography variant="h1" color="primary">
-                Illuminated Academy
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-                Hệ thống LCMS đang chạy ({themeMode} mode)
-            </Typography>
-            <Button variant="contained" color="primary" onClick={toggleTheme}>
-                Đổi Theme (Sáng/Tối)
-            </Button>
-        </Box>
-    );
-}

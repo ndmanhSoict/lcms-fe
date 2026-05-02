@@ -5,11 +5,11 @@ import * as S from './sidebar.style';
 import { useAuthStore } from '@/store/authStore';
 
 const MENU_ITEMS = [
-    { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
-    { text: 'Branches', icon: <AccountTree />, path: '/branches' },
-    { text: 'Admins', icon: <AdminPanelSettings />, path: '/admins' },
-    { text: 'Analytics', icon: <Analytics />, path: '/analytics' },
-    { text: 'Settings', icon: <Settings />, path: '/settings' },
+    { text: 'Tổng quan', icon: <Dashboard />, path: '/dashboard' },
+    { text: 'Cơ sở', icon: <AccountTree />, path: '/branches' },
+    { text: 'Quản trị viên', icon: <AdminPanelSettings />, path: '/admins' },
+    { text: 'Phân tích', icon: <Analytics />, path: '/analytics' },
+    { text: 'Cài đặt', icon: <Settings />, path: '/settings' },
 ];
 
 export const Sidebar = () => {
@@ -18,17 +18,15 @@ export const Sidebar = () => {
 
     return (
         <S.SidebarDrawer variant="permanent">
-            {/* Logo Area */}
             <S.LogoContainer>
                 <S.LogoText variant="h5">
                     EduCore
                 </S.LogoText>
                 <S.LogoSubtext variant="caption">
-                    System Portal
+                    Hệ thống Quản trị
                 </S.LogoSubtext>
             </S.LogoContainer>
 
-            {/* Navigation */}
             <S.NavList>
                 {MENU_ITEMS.map((item) => {
                     const isActive = location.pathname.startsWith(item.path);
@@ -41,25 +39,23 @@ export const Sidebar = () => {
                 })}
             </S.NavList>
 
-            {/* Footer Area */}
             <S.FooterContainer>
-                <Button 
-                    fullWidth 
-                    variant="contained" 
+                <Button
+                    fullWidth
+                    variant="contained"
                     startIcon={<PersonAdd />}
                 >
-                    Invite Member
+                    Mời thành viên
                 </Button>
 
-                {/* User Card */}
                 <S.UserCard>
-                    <Avatar 
-                        src="/admin-avatar.png" 
-                        variant="rounded" 
+                    <Avatar
+                        src="/admin-avatar.png"
+                        variant="rounded"
                     />
                     <S.UserInfoBox>
                         <Typography variant="subtitle2" fontWeight="bold" color="text.primary" noWrap>
-                            {user?.fullName || 'Admin User'}
+                            {user?.fullName || 'Quản trị viên'}
                         </Typography>
                         <Typography variant="caption" color="text.secondary" display="block" noWrap>
                             {user?.email || 'admin@educore.io'}

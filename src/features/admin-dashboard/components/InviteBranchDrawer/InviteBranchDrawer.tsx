@@ -1,5 +1,5 @@
-import { 
-    Typography, IconButton, TextField, MenuItem, 
+import {
+    Typography, IconButton, TextField, MenuItem,
     Button, Box
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
@@ -11,16 +11,13 @@ interface InviteBranchDrawerProps {
 }
 
 const SUBSCRIPTION_PLANS = [
-    { value: 'standard', label: 'Standard Growth' },
-    { value: 'premium', label: 'Premium Enterprise' },
-    { value: 'basic', label: 'Basic Starter' },
+    { value: 'standard', label: 'Gói Tiêu chuẩn' },
+    { value: 'premium', label: 'Gói Cao cấp' },
+    { value: 'basic', label: 'Gói Cơ bản' },
 ];
 
 export const InviteBranchDrawer = ({ open, onClose }: InviteBranchDrawerProps) => {
-    
     const handleSendInvitation = () => {
-        // Logic xử lý gửi invitation ở đây
-        console.log("Invitation Sent");
         onClose();
     };
 
@@ -29,7 +26,7 @@ export const InviteBranchDrawer = ({ open, onClose }: InviteBranchDrawerProps) =
             {/* Header */}
             <S.DrawerHeader>
                 <Typography variant="h2" color="primary.main">
-                    Invite New Branch
+                    Mời Cơ sở Mới
                 </Typography>
                 <IconButton onClick={onClose} size="small">
                     <Close />
@@ -39,27 +36,29 @@ export const InviteBranchDrawer = ({ open, onClose }: InviteBranchDrawerProps) =
             {/* Form Fields */}
             <S.FormContainer>
                 <S.InputGroup>
-                    <Typography variant="overline" color="text.secondary">Branch Name</Typography>
-                    <TextField fullWidth placeholder="e.g. Skyline Academy" />
+                    <Typography variant="overline" color="text.secondary">Tên cơ sở</Typography>
+                    <TextField fullWidth placeholder="VD: Học viện Phương Đông" />
                 </S.InputGroup>
 
                 <S.InputGroup>
-                    <Typography variant="overline" color="text.secondary">Email Address</Typography>
-                    <TextField fullWidth placeholder="admin@branch.com" />
+                    <Typography variant="overline" color="text.secondary">Địa chỉ Email</Typography>
+                    <TextField fullWidth placeholder="admin@cosovd.com" />
                 </S.InputGroup>
 
                 <S.InputGroup>
-                    <Typography variant="overline" color="text.secondary">City</Typography>
+                    <Typography variant="overline" color="text.secondary">Thành phố</Typography>
                     <TextField fullWidth select defaultValue="">
-                        <MenuItem value="" disabled>Select city...</MenuItem>
-                        <MenuItem value="hcm">Ho Chi Minh City</MenuItem>
-                        <MenuItem value="hn">Ha Noi</MenuItem>
-                        <MenuItem value="ny">New York</MenuItem>
+                        <MenuItem value="" disabled>Chọn thành phố...</MenuItem>
+                        <MenuItem value="hcm">Hồ Chí Minh</MenuItem>
+                        <MenuItem value="hn">Hà Nội</MenuItem>
+                        <MenuItem value="dn">Đà Nẵng</MenuItem>
+                        <MenuItem value="ct">Cần Thơ</MenuItem>
+                        <MenuItem value="hp">Hải Phòng</MenuItem>
                     </TextField>
                 </S.InputGroup>
 
                 <S.InputGroup>
-                    <Typography variant="overline" color="text.secondary">Subscription Plan</Typography>
+                    <Typography variant="overline" color="text.secondary">Gói dịch vụ</Typography>
                     <TextField fullWidth select defaultValue="standard">
                         {SUBSCRIPTION_PLANS.map((plan) => (
                             <MenuItem key={plan.value} value={plan.value}>
@@ -70,32 +69,31 @@ export const InviteBranchDrawer = ({ open, onClose }: InviteBranchDrawerProps) =
                 </S.InputGroup>
 
                 <S.InputGroup>
-                    <Typography variant="overline" color="text.secondary">Message (Optional)</Typography>
-                    <TextField 
-                        fullWidth 
-                        multiline 
-                        rows={4} 
-                        placeholder="Personalize your invitation..." 
+                    <Typography variant="overline" color="text.secondary">Lời nhắn (Tùy chọn)</Typography>
+                    <TextField
+                        fullWidth
+                        multiline
+                        rows={4}
+                        placeholder="Nhập lời nhắn cá nhân hóa cho lời mời..."
                     />
                 </S.InputGroup>
 
                 <Box sx={{ mt: 4 }}>
-                    <Button 
-                        variant="contained" 
-                        fullWidth 
+                    <Button
+                        variant="contained"
+                        fullWidth
                         size="large"
                         onClick={handleSendInvitation}
                         sx={{ height: 56 }}
                     >
-                        Send Invitation
+                        Gửi Lời Mời
                     </Button>
                 </Box>
 
-                {/* Footer Disclaimer */}
                 <S.FooterDisclaimer>
                     <Typography>
-                        An invitation email will be sent to the administrator. 
-                        They will have 48 hours to activate the account.
+                        Email mời sẽ được gửi đến quản trị viên.
+                        Họ có 48 giờ để kích hoạt tài khoản.
                     </Typography>
                 </S.FooterDisclaimer>
             </S.FormContainer>
