@@ -9,13 +9,46 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as R403RouteImport } from './routes/403'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BranchUsersRouteImport } from './routes/_branch/users'
+import { Route as BranchTeachersRouteImport } from './routes/_branch/teachers'
+import { Route as BranchStudentsRouteImport } from './routes/_branch/students'
+import { Route as BranchClassesRouteImport } from './routes/_branch/classes'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AdminDashboardRouteImport } from './routes/_admin/dashboard'
+import { Route as AdminBranchesRouteImport } from './routes/_admin/branches'
+import { Route as BranchClassesIndexRouteImport } from './routes/_branch/classes.index'
+import { Route as BranchClassesClassIdRouteImport } from './routes/_branch/classes.$classId'
 
+const R403Route = R403RouteImport.update({
+  id: '/403',
+  path: '/403',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BranchUsersRoute = BranchUsersRouteImport.update({
+  id: '/_branch/users',
+  path: '/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BranchTeachersRoute = BranchTeachersRouteImport.update({
+  id: '/_branch/teachers',
+  path: '/teachers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BranchStudentsRoute = BranchStudentsRouteImport.update({
+  id: '/_branch/students',
+  path: '/students',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BranchClassesRoute = BranchClassesRouteImport.update({
+  id: '/_branch/classes',
+  path: '/classes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
@@ -28,44 +61,156 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminBranchesRoute = AdminBranchesRouteImport.update({
+  id: '/_admin/branches',
+  path: '/branches',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BranchClassesIndexRoute = BranchClassesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BranchClassesRoute,
+} as any)
+const BranchClassesClassIdRoute = BranchClassesClassIdRouteImport.update({
+  id: '/$classId',
+  path: '/$classId',
+  getParentRoute: () => BranchClassesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/403': typeof R403Route
+  '/branches': typeof AdminBranchesRoute
   '/dashboard': typeof AdminDashboardRoute
   '/login': typeof AuthLoginRoute
+  '/classes': typeof BranchClassesRouteWithChildren
+  '/students': typeof BranchStudentsRoute
+  '/teachers': typeof BranchTeachersRoute
+  '/users': typeof BranchUsersRoute
+  '/classes/$classId': typeof BranchClassesClassIdRoute
+  '/classes/': typeof BranchClassesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/403': typeof R403Route
+  '/branches': typeof AdminBranchesRoute
   '/dashboard': typeof AdminDashboardRoute
   '/login': typeof AuthLoginRoute
+  '/students': typeof BranchStudentsRoute
+  '/teachers': typeof BranchTeachersRoute
+  '/users': typeof BranchUsersRoute
+  '/classes/$classId': typeof BranchClassesClassIdRoute
+  '/classes': typeof BranchClassesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/403': typeof R403Route
+  '/_admin/branches': typeof AdminBranchesRoute
   '/_admin/dashboard': typeof AdminDashboardRoute
   '/_auth/login': typeof AuthLoginRoute
+  '/_branch/classes': typeof BranchClassesRouteWithChildren
+  '/_branch/students': typeof BranchStudentsRoute
+  '/_branch/teachers': typeof BranchTeachersRoute
+  '/_branch/users': typeof BranchUsersRoute
+  '/_branch/classes/$classId': typeof BranchClassesClassIdRoute
+  '/_branch/classes/': typeof BranchClassesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login'
+  fullPaths:
+    | '/'
+    | '/403'
+    | '/branches'
+    | '/dashboard'
+    | '/login'
+    | '/classes'
+    | '/students'
+    | '/teachers'
+    | '/users'
+    | '/classes/$classId'
+    | '/classes/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login'
-  id: '__root__' | '/' | '/_admin/dashboard' | '/_auth/login'
+  to:
+    | '/'
+    | '/403'
+    | '/branches'
+    | '/dashboard'
+    | '/login'
+    | '/students'
+    | '/teachers'
+    | '/users'
+    | '/classes/$classId'
+    | '/classes'
+  id:
+    | '__root__'
+    | '/'
+    | '/403'
+    | '/_admin/branches'
+    | '/_admin/dashboard'
+    | '/_auth/login'
+    | '/_branch/classes'
+    | '/_branch/students'
+    | '/_branch/teachers'
+    | '/_branch/users'
+    | '/_branch/classes/$classId'
+    | '/_branch/classes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  R403Route: typeof R403Route
+  AdminBranchesRoute: typeof AdminBranchesRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  BranchClassesRoute: typeof BranchClassesRouteWithChildren
+  BranchStudentsRoute: typeof BranchStudentsRoute
+  BranchTeachersRoute: typeof BranchTeachersRoute
+  BranchUsersRoute: typeof BranchUsersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/403': {
+      id: '/403'
+      path: '/403'
+      fullPath: '/403'
+      preLoaderRoute: typeof R403RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_branch/users': {
+      id: '/_branch/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof BranchUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_branch/teachers': {
+      id: '/_branch/teachers'
+      path: '/teachers'
+      fullPath: '/teachers'
+      preLoaderRoute: typeof BranchTeachersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_branch/students': {
+      id: '/_branch/students'
+      path: '/students'
+      fullPath: '/students'
+      preLoaderRoute: typeof BranchStudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_branch/classes': {
+      id: '/_branch/classes'
+      path: '/classes'
+      fullPath: '/classes'
+      preLoaderRoute: typeof BranchClassesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/login': {
@@ -82,13 +227,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_admin/branches': {
+      id: '/_admin/branches'
+      path: '/branches'
+      fullPath: '/branches'
+      preLoaderRoute: typeof AdminBranchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_branch/classes/': {
+      id: '/_branch/classes/'
+      path: '/'
+      fullPath: '/classes/'
+      preLoaderRoute: typeof BranchClassesIndexRouteImport
+      parentRoute: typeof BranchClassesRoute
+    }
+    '/_branch/classes/$classId': {
+      id: '/_branch/classes/$classId'
+      path: '/$classId'
+      fullPath: '/classes/$classId'
+      preLoaderRoute: typeof BranchClassesClassIdRouteImport
+      parentRoute: typeof BranchClassesRoute
+    }
   }
 }
 
+interface BranchClassesRouteChildren {
+  BranchClassesClassIdRoute: typeof BranchClassesClassIdRoute
+  BranchClassesIndexRoute: typeof BranchClassesIndexRoute
+}
+
+const BranchClassesRouteChildren: BranchClassesRouteChildren = {
+  BranchClassesClassIdRoute: BranchClassesClassIdRoute,
+  BranchClassesIndexRoute: BranchClassesIndexRoute,
+}
+
+const BranchClassesRouteWithChildren = BranchClassesRoute._addFileChildren(
+  BranchClassesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  R403Route: R403Route,
+  AdminBranchesRoute: AdminBranchesRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AuthLoginRoute: AuthLoginRoute,
+  BranchClassesRoute: BranchClassesRouteWithChildren,
+  BranchStudentsRoute: BranchStudentsRoute,
+  BranchTeachersRoute: BranchTeachersRoute,
+  BranchUsersRoute: BranchUsersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
